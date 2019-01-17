@@ -1,0 +1,212 @@
+step1 basic commands: 
+(1) Run ./myShell
+	Run ls
+	Run clear
+You will see that it lists  information  about  the FILEs, and then clear the screen, which is correct because the behavior is the same as the original shell.
+(2) Run ./myShell
+	Run         ls
+You will see that it lists  information  about  the FILEs, which is correct because the behavior is the same as the original shell.
+(3) Run cat README
+You will see that it prints what is inside README, which is correct because myShell can find “cat” command under current directory and excute it.
+(4) Run ./myShell
+    Run cat             README
+    Run cat      README   
+    Run             cat   README     
+With all these commands, you will see that it prints what is inside README, which is correct because the white space between arguments should be ignore.
+(5) Run ./myShell
+	Create a file named “\   .txt” using vim, Run cat “\   .txt”
+You will see that you can create the file but you cannot cat it, which is correct because the behavior is the same as the real shell and in "cat" we should treat “\ ” as “ ” in the file name.
+(6) There is a file test1.txt, and it contains 1 line "cat README"
+	Run ./myShell < test1.txt 
+You will see that myShell excutes and it prints what is inside README and then it prints "Program exited with status 0" and exit, which is correct because the shell should exit and print "Program exited with status 0".
+(7) Run ./myShell
+	Run ./myShell again
+	Run exit 
+You will see that the shell exit, which is correct because the shell should exit when entered "exit".
+(1) With all these above test cases, it prints "Program exited with status 0 [replace 0 with the actual exit status] " in myShell, which is correct because the process is not killed or exit.
+
+(8) Run ./myShell
+	Run ./myShell again
+	Run kill 17027(please replace real PID of the second ./myShell with 17027)
+You will see that it prints "Program was killed by signal 11" [replace 11 with the actual signal] and print "myShell$" again, which is correct because the shell should  print "Program was killed by signal 11" [replace 11 with the actual signal], when it is killed" and the shell should print the "myShell$" prompt again, and repeat the process.
+(9) Run ./myShell
+	type enter
+You will see that it prints "myShell:/home/yy194/ece551/mp_miniproject $", which is correct because the shell is waiting for commands.
+
+Step 2: Improving commands
+(1) Run ./myShell
+	Run /bin/cat README
+You will see that it prints what is inside README, which is correct because this is valid directory and "cat" is valid in this directory.
+(2) Run ./myShell
+	Run /home/cat README
+You will see perror, which is correct because this is an invalid directory.
+(3) Run ./myShell
+	Run /.././bin/cat README
+You will see that it prints what is inside README, which is correct because bin is valid relative directory and "cat" is valid in this directory
+(4) Run ./myShell
+	Run /cat README
+You will see perror, which is correct because this is an invalid directory.
+(5) Run ./myShell
+	Run cat test1.txt
+You will see it prints what is inside test1.txt, which is correct because there is no "/", so we search in the PATH and find the "cat" command.
+(6) Run ./myShell
+	Run l
+You will see perror, which is correct because we search in PATH and we cannot find "l" command.
+(7) Run ./myShell
+	Run echo a\  b c \ d
+You will see "a  b c  d", which is correct because we will treat "/ " as literaly " ".
+(8) Run ./myShell
+	Run echo a\ b c\ \ d
+You will see "a b c  d", which is correct because we will treat "/ " as literaly " ".
+(9) Run ./myShell
+	Run echo a b c d
+You will see "a b c d", which is correct because we will skip " ".
+(10) Run ./myShell
+	Run echo     a   b   c    d  
+You will see "a b c d", which is correct because we will skip " ".
+(11) Run ./myShell
+	Run echo aa\\ 
+You will see "aa\\", which is correct because we cannot skip '\' without "\ ".
+(12) Run ./myShell
+	Run echo aa\ \ 
+You will see "aa \", which is correct because we should skip '\' with "\ ".
+(13) Run ./myShell
+	Run echo \ 
+You will see "\", which is correct because we should not skip '\' in this case.
+
+
+step3 Directories and Variables
+(1) Run ./myShell
+	Run env
+You will see that it prints environment variables, which is correct because the behavior is the same as the real shell.
+(2) Run ./myShell
+	Run cd
+You will see perror "invalid cd", which is correct because there is no argument after "cd".
+(3) Run ./myShell
+	Run cd ..
+You will see the directory changes to the upper level and the prompt shows the current directory before the $, which is correct because "cd" should change the directory.
+(4) Run ./myShell
+	Run cd .. aaa nn xzz
+You will see You will see the directory changes to the upper level and the prompt shows the current directory before the $, which is correct because "cd" only takes the first argument after it.
+(5) Run ./myShell
+	Run cd / 
+You will see the directory change to "/", which is correct because there it should change to root directory.
+(6) Run ./myShell
+	Run cd . 
+You will see we stay in the current directory, which is correct because there it should not change.
+(7) Run ./myShell
+	Run cd ..///
+You will see it changes to the upper directory, which is correct because this should be same as "..".
+(8) Run ./myShell
+	Run cd ..
+	Run cd mp_miniproject
+You will see it changes to mp_miniproject directory, which is correct because we should change to the corresponding directory.
+(9) Run ./myShell
+	Run /home/yy194/ece551/mp_miniproject
+You will see it doesn't change, which is correct because the input directory equals to current directory
+(10) Run ./myShell
+	Run cd ece551
+You will see error, which is correct because this is not a valid directory.
+(11) Run ./myShell
+	Run cd /home/yy194
+You will see we change to /home/yy194, which is correct because this is a valid directory.
+(12) Run ./myShell
+	Run set 11dd__s a
+	Run export 11dd__s
+	Run env
+	Run set set 1 234
+	Run export 1
+	Run env
+	Run set set ___ 123
+	Run export ___
+	Run env
+You will see 11dd__s=a, 1=234, ___=123, which is correct because variable name and value is valid, and it should put the current value of var into the environment for other programs, when export.
+(13) Run ./myShell
+	Run set 1aa*a a
+	Run export 
+	Run env
+You will see perror"invalid variable name", which is correct because variable name is invalid.
+(14) Run ./myShell
+	Run set a b
+	Run export a
+	Run env
+	Run set a c
+	Run export a
+	Run env
+	Run set A d
+	Run export A
+	Run env
+You will first see a=b then a=c and A=d, which is correct because setting the same variable will change its value, and this is case sensitive.
+(15) Run ./myShell
+	Run set g g
+	Run env
+You will first not see g=g if you did not export it, which is correct because it should not be placed in the environment for other programs when you set without export.
+(16)Run ./myShell
+	Run set PATH /home/yy194/ece551
+	Run export PATH
+	Run ls
+You will see "Command ls not found", which is correct because if the user changes PATH, it should affect where the shell searches for programs.
+(17) Run ./myShell
+	Run set a READ
+	Run set b ME
+	Run cat $a$b
+	Run cat READ$b
+You will see it is the same as "cat README", which is correct because we should replace a with "READ" and b with "ME".
+(18) Run ./myShell
+	Run set a READ
+	Run set b ME
+	Run cat $aME
+You will see "No such file or directory", which is correct because we only replace the string between two '$' or between '$' to the end.
+(19) Run ./myShell
+	Run set b a        
+	export b        
+	env
+You will see b=a        , which is correct because we should set the variable var to the string on the rest of the command line even if it contains spaces.
+(20) Run ./myShell
+	Run set b a        
+	export b        
+	env
+You will see b=a        , which is correct because we should set the variable var to the string on the rest of the command line even if it contains spaces.
+(21) Run ./myShell
+	Run set a
+	Run export
+	Run env
+You will see a=, which is correct because a's value should be "".
+(22) Run ./myShell
+	Run set
+You will see perror "invalid set", which is correct because set cannot have 0 argument.
+(23) Run ./myShell
+	Run export
+You will first see "myShell:/home/yy194/ece551/mp_miniproject $", which is correct because there is no argument for export.
+
+step4 test redirection
+(1) Run ./myShell
+	Run ls da 2> errr.txt        
+You will see a file named errr.txt that contains error message, which is correct because this is an error redirection.
+(2) Run ./myShell
+	Run ./myShell < test1.txt       
+You will see it runs test case 1, which is correct because this is an standard input redirection.
+(3) Run ./myShell
+	Run echo aaaa > out.txt       
+You will see it creates a file named out.txt that contains "aaaa" in it, which is correct because this is an standard output redirection.
+(4) Run ./myShell
+	Run echo aaaa > bbbb > cccc > dddd       
+You will see it creates a file named dddd that contains "aaaa" in it, which is correct because this is an standard output redirection and we should take the last argument as the destination file.
+(5) Run ./myShell
+	Run ./myShell < test1.txt < test2.txt < test3.txt       
+You will see it ./myShell handles test3.txt, which is correct because we only take the last valid argument as target.
+(6) Run ./myShell
+	Run ls dsafad 2> err0.txt 2>  err1.txt > err2.txt
+You will see it only creates file err2.txt, which is correct because we only take the last valid argument as target.
+(7) Run ./myShell
+	Run echo aaaa > redirtest.txt
+	Run cat redirtest.txt
+	Run echo bbbb > redirtest.txt
+	Run cat redirtest.txt
+You will see it first inputs aaaa in redirtest.txt then bbbb replaces aaaa, which is correct because we overwrite the file when redirect in the same file again.
+(7) Run ./myShell
+	Run ls aaaa 2> err0.txt
+	Run cat err0.txt
+	Run ls bbbb 2> err0.txt
+	Run cat err0.txt
+You will see it first inputs aaaa in err0.txt then bbbb replaces aaaa, which is correct because we overwrite the file when redirect in the same file again.
